@@ -1,11 +1,14 @@
 import os
 import sys
 
+directory = sys.argv[1]
+stopAt = int(sys.argv[2])  #minutes
+
 def print_html_head():
     print("<html><head><script>")
     print("function stopAt(elemId) {\n" +
-    "    var stopAt = 3.0; // minutes\n" +
-    "    var grace = 1.0; // seconds\n" +
+    "    var stopAt = " + str(stopAt) +".0; // minutes\n" +
+    "    var grace = 2.0; // seconds\n" +
     "    var elem = document.getElementById(elemId);\n" +
     "    elem.currentTime = 0.0;\n" +
     "    setTimeout(function() {\n" +
@@ -22,8 +25,12 @@ def print_html_head():
     "    }                            \n" +
     "}                                \n")
     print("</script>")
-    print("<style>td { min-width: 20px; padding: 10px; font-family: sans-serif;}</style></head>")
-    print("<body><table border>")
+    print("<style>")
+    print("body {font-family: sans-serif;}")
+    print("td { max-width: 400px; min-width: 20px; padding: 10px; }")
+    print("td:nth-child(3) { font-size: 12;}")
+    print("</style></head>")
+    print("<body><h1>" + directory + "  stop at " + str(stopAt) + " minutes</h1><table border>")
 
 def print_one_music(id, name, filename):
     print("<tr onclick='toggleBackground(this);'>")
@@ -61,9 +68,6 @@ def find_player_file(player, files):
         else:
             return result[0]
 
-
-directory = sys.argv[1]
-
 files = os.listdir(directory)
 
 with open(directory + '/playerlist.txt') as f:
@@ -78,4 +82,3 @@ for i, p in enumerate(players):
     print_one_music(i + 1, p, directory + '/' + file)
 
 print_html_tail()
-
