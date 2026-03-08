@@ -4,46 +4,77 @@
     <title>CANYA Music List</title>
     <meta name="description" content="CANYA Music List" />
     <meta name="keywords" content="music list, CANYA" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/yegor256/tacit@gh-pages/tacit-css-1.9.5.min.css" />
     <style>
-      body {
-        font-family: sans-serif;
-      }
-      td {
-        max-width: 400px;
-        min-width: 20px;
-        padding: 10px;
-      }
-      td:nth-child(3) {
-        font-size: 12;
-      }
-      tr.selected {
-        background-color: #ddd
-      }
+    table {
+      border: 2px solid #8c8c8c;
+      margin-bottom: 0;
+      /* prevent oversized tables */
+      table-layout: auto;
+      width: 100%;
+    }
+
+    table tr td,
+    table tr th {
+      border: 1px solid #a0a0a0;
+      vertical-align: middle;
+      /* override tacit-css breakpoints */
+      padding-left: 0.675rem;
+      padding-right: 0.675rem;
+    }
+
+    /* toggleBackground */
+    table tbody tr.selected {
+      background-color: #ccc;
+    }
+
+    table tbody tr.selected:hover {
+      background-color: #bbb;
+    }
+
+    /* override tacit-css breakpoints to prevent table squashing on smaller screens */
+    table,
+    table thead,
+    table tr,
+    table tr td,
+    table tr th,
+    table col {
+      display: revert !important;
+    }
+
     </style>
   </head>
   <body>
-    <h1>CANYA Music List</h1>
-    <code>{{ directory }}</code>
-    <p>
-      Stop at <mark>{{ stop_at }}</mark> {{ "minute" if stop_at == 1 else "minutes" }}
-    </p>
-    <table border>
-      {% for player in player_files %}
-        <tr onclick="toggleBackground(this);">
-          <td>{{ player.id }}</td>
-          <td>{{ player.name }}</td>
-          <td>
-            <audio id="{{ player.id }}"
-                   controls
-                   src="{{ player.filename }}"
-                   type="audio/mpeg"
-                   onplay="stopAt(this)"></audio>
-            <br>
-            <small>{{ player.filename }}</small>
-          </td>
-        </tr>
-      {% endfor %}
-    </table>
+    <section>
+      <header>
+        <h1>CANYA Music List</h1>
+        <code>{{ directory }}</code>
+        <p>
+          Stop at <mark>{{ stop_at }}</mark> {{ "minute" if stop_at == 1 else
+          "minutes" }}
+        </p>
+      </header>
+      <article>
+        <table border>
+          {% for player in player_files %}
+            <tr onclick="toggleBackground(this);">
+              <td>{{ player.id }}</td>
+              <td>{{ player.name }}</td>
+              <td>
+                <audio id="{{ player.id }}"
+                       controls
+                       src="{{ player.filename }}"
+                       type="audio/mpeg"
+                       onplay="stopAt(this)"></audio>
+                <br>
+                <small>{{ player.filename }}</small>
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      </article>
+    </section>
     <script>
     const CUTOFF = {{ stop_at }}; // minutes
     const GRACE = 2; // seconds
