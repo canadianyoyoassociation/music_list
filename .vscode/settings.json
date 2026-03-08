@@ -1,0 +1,7 @@
+{
+  "[html][django-html][handlebars][hbs][mustache][jinja][jinja-html][nj][njk][nunjucks][twig]": {
+    // use the djlint extension for formatting jinja2 templates
+    // https://github.com/djlint/djlint-vscode
+    "editor.defaultFormatter": "monosans.djlint"
+  }
+}
