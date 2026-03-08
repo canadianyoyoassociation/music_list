@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CANYA Music List</title>
+    <meta name="description" content="CANYA Music List" />
+    <meta name="keywords" content="music list, CANYA" />
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+      td {
+        max-width: 400px;
+        min-width: 20px;
+        padding: 10px;
+      }
+      td:nth-child(3) {
+        font-size: 12;
+      }
+      tr.selected {
+        background-color: #ddd
+      }
+    </style>
+  </head>
+  <body>
+    <h1>CANYA Music List</h1>
+    <code>{{ directory }}</code>
+    <p>
+      Stop at <mark>{{ stop_at }}</mark> {{ "minute" if stop_at == 1 else "minutes" }}
+    </p>
+    <table border>
+      {% for player in player_files %}
+        <tr onclick="toggleBackground(this);">
+          <td>{{ player.id }}</td>
+          <td>{{ player.name }}</td>
+          <td>
+            <audio id="{{ player.id }}"
+                   controls
+                   src="{{ player.filename }}"
+                   type="audio/mpeg"
+                   onplay="stopAt(this)"></audio>
+            <br>
+            <small>{{ player.filename }}</small>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+    <script>
+    const CUTOFF = {{ stop_at }}; // minutes
+    const GRACE = 2; // seconds
+
+    function stopAt(elem) {
+      // rewind to beginning before playing
+      elem.currentTime = 0;
+
+      // stop after CUTOFF minutes + GRACE seconds
+      setTimeout(function () {
+        elem.pause();
+        //elem.currentTime = 0; // rewinds to beginning
+      }, ((CUTOFF * 60) + GRACE) * 1000);
+    }
+
+    function toggleBackground(elem) {
+      elem.classList.toggle("selected");
+    }
+    </script>
+  </body>
+</html>
