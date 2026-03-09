@@ -8,7 +8,7 @@ Generates an HTML page with audio players for a list of music files.
 # install Python 3
 
 # command usage:
-python genlist.py <music_directory> <stop_minutes>
+python genlist.py [-h | --help] <music_directory> <stop_minutes>
 
 # e.g.: save html code to file
 python genlist.py <music_directory> <stop_minutes> > index.html

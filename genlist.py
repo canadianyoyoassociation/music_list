@@ -1,9 +1,6 @@
+import argparse
 import os
 import string
-import sys
-
-directory = sys.argv[1]
-stop_at = int(sys.argv[2])  # minutes
 
 
 # find a file based on the player's full name
@@ -54,28 +51,44 @@ def build_player_row(player_id, player_name, player_filename):
     """
 
 
-files = os.listdir(directory)
+def main(directory: str, stop_at: int):
+    files = os.listdir(directory)
 
-with open(os.path.join(directory, 'playerlist.txt')) as f:
-    players = [line.strip() for line in f]
+    with open(os.path.join(directory, 'playerlist.txt')) as f:
+        players = [line.strip() for line in f]
 
-# build template data
-players_table = ""
-for i, p in enumerate(players):
-    filename = find_player_file(p, files)
-    players_table += build_player_row(
-        player_id=i + 1,
-        player_name=p,
-        player_filename=f'{directory}/{filename}',
-    )
+    # build template data
+    players_table = ""
+    for i, p in enumerate(players):
+        filename = find_player_file(p, files)
+        players_table += build_player_row(
+            player_id=i + 1,
+            player_name=p,
+            player_filename=f'{directory}/{filename}',
+        )
 
-# output
-with open('template.html') as f:
-    template = f.read()
+    # output
+    with open('template.html') as f:
+        template = f.read()
 
-print(string.Template(template).safe_substitute(
-    stop_at=stop_at,
-    stop_at_unit='minute' if stop_at == 1 else 'minutes',
-    directory=directory,
-    players_table=players_table,
-))
+    print(string.Template(template).safe_substitute(
+        stop_at=stop_at,
+        stop_at_unit='minute' if stop_at == 1 else 'minutes',
+        directory=directory,
+        players_table=players_table,
+    ))
+
+
+def extract_args():
+    parser = argparse.ArgumentParser(
+        description='Generate a music list HTML file.',
+        epilog='Example: %(prog)s "./music_dir" 3 > index.html')
+    parser.add_argument('directory', type=str,
+                        help='Directory containing playerlist.txt and music files')
+    parser.add_argument('stop_at', type=int,
+                        help='Stop at this many minutes')
+    return vars(parser.parse_args())
+
+
+if __name__ == '__main__':
+    main(**extract_args())
