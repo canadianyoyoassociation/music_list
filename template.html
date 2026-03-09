@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>CANYA Music List</title>
+    <meta name="description" content="CANYA Music List" />
+    <meta name="keywords" content="music list, CANYA" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/yegor256/tacit@gh-pages/tacit-css-1.9.5.min.css"
+    />
+    <style>
+      table {
+        border: 2px solid #8c8c8c;
+        margin-bottom: 0;
+        /* prevent oversized tables */
+        table-layout: auto;
+        width: 100%;
+      }
+
+      table tr td,
+      table tr th {
+        border: 1px solid #a0a0a0;
+        vertical-align: middle;
+        /* override tacit-css breakpoints */
+        padding-left: 0.675rem;
+        padding-right: 0.675rem;
+      }
+
+      /* toggleBackground */
+      table tbody tr.selected {
+        background-color: #ccc;
+      }
+
+      table tbody tr.selected:hover {
+        background-color: #bbb;
+      }
+
+      /* override tacit-css breakpoints to prevent table squashing on smaller screens */
+      table,
+      table thead,
+      table tr,
+      table tr td,
+      table tr th,
+      table col {
+        display: revert !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section>
+      <header>
+        <h1>CANYA Music List</h1>
+        <code>${directory}</code>
+        <p>Stop at <mark>${stop_at}</mark> ${stop_at_unit}</p>
+        <button onclick="stopAllAudio()">Stop all audio</button>
+      </header>
+      <article>
+        <table>
+          ${players_table}
+        </table>
+      </article>
+    </section>
+    <script>
+      const CUTOFF = $stop_at * 60; // seconds
+      const GRACE = 2; // seconds
+
+      let CURR_TIMEOUT_ID = null;
+
+      function stopAt(elem) {
+        // clear any previous timeout if it exists
+        clearTimeout(CURR_TIMEOUT_ID);
+
+        CURR_TIMEOUT_ID = setTimeout(
+          function () {
+            elem.pause();
+          },
+          // stop after CUTOFF + GRACE seconds
+          (CUTOFF + GRACE) * 1000
+        );
+      }
+
+      function rewindAudio(id) {
+        event.stopPropagation(); // prevent triggering toggleBackground
+
+        const audioElem = document.getElementById(id);
+        audioElem.pause();
+        audioElem.currentTime = 0; // rewinds to beginning
+      }
+
+      function toggleBackground(elem) {
+        elem.classList.toggle("selected");
+      }
+
+      function stopAllAudio() {
+        document.querySelectorAll("audio").forEach((el) => el.pause());
+      }
+    </script>
+  </body>
+</html>
