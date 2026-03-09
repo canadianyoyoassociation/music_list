@@ -6,14 +6,15 @@ stopAt = int(sys.argv[2])  #minutes
 
 def print_html_head():
     print("<html><head><script>")
+    print("let TIMEOUT_ID = null;")
     print("function stopAt(elemId) {\n" +
+    "    clearTimeout(TIMEOUT_ID); // clear any previous timeouts\n" +
     "    var stopAt = " + str(stopAt) +".0; // minutes\n" +
     "    var grace = 2.0; // seconds\n" +
     "    var elem = document.getElementById(elemId);\n" +
     "    elem.currentTime = 0.0;\n" +
-    "    setTimeout(function() {\n" +
+    "    TIMEOUT_ID = setTimeout(function() {\n" +
     "        elem.pause();\n" +
-    "        //elem.currentTime = 0; // rewinds to beginning\n" +
     "    }, ((stopAt * 60) + grace) * 1000);\n" +
     "}\n")
     print("function toggleBackground(elem) {\n" +
