@@ -15,7 +15,6 @@ def print_html_head():
     "    elem.currentTime = 0.0;\n" +
     "    TIMEOUT_ID = setTimeout(function() {\n" +
     "        elem.pause();\n" +
-    "        //elem.currentTime = 0; // rewinds to beginning\n" +
     "    }, ((stopAt * 60) + grace) * 1000);\n" +
     "}\n")
     print("function toggleBackground(elem) {\n" +
